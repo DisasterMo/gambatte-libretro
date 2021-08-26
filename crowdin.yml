@@ -1,0 +1,3 @@
+files:
+  - source: /libgambatte/libretro/intl/_us/*.json
+    translation: /libgambatte/libretro/intl/_%two_letters_code%/%original_file_name%
