@@ -1,5 +1,4 @@
-"project_id": "380544"                     #open project settings and go to API section
-"api_token": "000000"  #open profile settings and go to API > New Token > create Token
+"project_id": "470308"                     #open project settings and go to API section
 "base_path": "./intl"
 "base_url": "https://api.crowdin.com"
 "preserve_hierarchy": true
