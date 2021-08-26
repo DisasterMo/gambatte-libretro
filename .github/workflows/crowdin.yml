@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  synchronize-with-croẃdin:
+  synchronize-with-crowdin:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Python
