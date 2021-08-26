@@ -29,7 +29,7 @@ jobs:
           download_translations: true
         env:
           CROWDIN_PROJECT_ID: "470308"
-          CROWDIN_PERSONAL_TOKEN: "92c1588f8fc5b24f1e70e85cabd9b8fe5b22dbe9aec7a9d885e5a5b3d8d673df52352a52c80db0ef"
+          CROWDIN_PERSONAL_TOKEN: ""
           
       - name: Crowdin Post
         shell: bash
