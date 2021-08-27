@@ -1,6 +1,6 @@
 "project_id_env": "CROWDIN_PROJECT_ID"                     #open project settings and go to API section
 "api_token_env": "CROWDIN_PERSONAL_TOKEN"
-"base_path": "./intl"
+"base_path": "libgambatte/libretro/intl"
 "base_url": "https://api.crowdin.com"
 "preserve_hierarchy": true
 
