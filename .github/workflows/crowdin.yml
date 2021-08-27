@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  synchronize-with-crowdin:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Python
@@ -17,7 +17,7 @@ jobs:
       - name: Crowdin Pre
         shell: bash
         run: |
-          cd ../gambatte-libretro/gambatte-libretro/libgambatte/libretro/
+          cd ../libgambatte/libretro/
           python3 crowdin_pre.py "gambatte-libretro"
 
       - name: Checkout
@@ -35,5 +35,5 @@ jobs:
       - name: Crowdin Post
         shell: bash
         run: |
-          cd ../gambatte-libretro/gambatte-libretro/libgambatte/libretro/
+          cd ../gambatte-libretro/libgambatte/libretro/
           python3 crowdin_post.py "gambatte-libretro"
