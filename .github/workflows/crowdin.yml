@@ -17,7 +17,7 @@ jobs:
       - name: Crowdin Pre
         shell: bash
         run: |
-          cd ../gambatte-libretro/libgambatte/libretro/
+          cd libgambatte
           python3 crowdin_pre.py "gambatte-libretro"
 
       - name: Checkout
