@@ -1,14 +1,16 @@
-# Upload sources to Crowdin for translation & convert new translations
+# Prepare source for Crowdin sync
 
-name: Crowdin Workflow
+name: Crowdin Upload Preparation
 
 on:
   push:
     branches:
       - master
+    paths:
+      - 'libgambatte/libretro/libretro_core_options.h'
 
 jobs:
-  sync:
+  prepare_source_file:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Python
@@ -20,36 +22,21 @@ jobs:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
-      - name: Crowdin Pre
+      - name: Crowdin Prep
         shell: bash
         run: |
           cd libgambatte/libretro/
-          python3 crowdin_pre.py "gambatte-libretro"
-      
-      - name: crowdin action
-        uses: crowdin/github-action@1.0.4
-        with:
-          upload_sources: true
-          config: 'libgambatte/libretro/crowdin.yaml'
-        env:
-          GITHUB_TOKEN: $
-          CROWDIN_PROJECT_ID: "470308"
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
+          python3 crowdin_prep.py
           
-      - name: Crowdin Post
-        shell: bash
-        run: |
-          cd libgambatte/libretro/
-          python3 crowdin_post.py "gambatte-libretro"
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Recreate libretro_core_options_intl.h" -a
+          git add libgambatte/libretro/intl/*
+          git commit -m "Recreate translation source text files" -a
 
       - name: GitHub Push
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
-
