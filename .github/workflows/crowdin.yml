@@ -5,6 +5,9 @@ name: Crowdin Workflow
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'libgambatte/libretro/intl/*'
+      - 'libgambatte/libretro/libretro_core_options.h'
 
 jobs:
   synchronize-with-crowdin:
@@ -16,7 +19,7 @@ jobs:
       - name: Crowdin Pre
         shell: bash
         run: |
-          cd libgambatte/libretro
+          cd libgambatte/libretro/
           python3 crowdin_pre.py "gambatte-libretro"
 
       - name: Checkout
@@ -34,5 +37,5 @@ jobs:
       - name: Crowdin Post
         shell: bash
         run: |
-          cd libgambatte/libretro
+          cd libgambatte/libretro/
           python3 crowdin_post.py "gambatte-libretro"
