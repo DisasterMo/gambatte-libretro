@@ -6,9 +6,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'libgambatte/libretro/intl/*'
-      - 'libgambatte/libretro/libretro_core_options.h'
 
 jobs:
   synchronize-with-crowdin:
