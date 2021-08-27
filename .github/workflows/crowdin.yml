@@ -4,7 +4,8 @@ name: Crowdin Workflow
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
     paths:
       - 'libgambatte/libretro/intl/*'
       - 'libgambatte/libretro/libretro_core_options.h'
