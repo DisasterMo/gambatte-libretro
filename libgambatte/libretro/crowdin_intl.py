@@ -2,11 +2,7 @@
 
 import translate as t
 
-try:
-    _core_name = t.sys.argv[1]
-except IndexError:
-    print('Please provide core name!')
-    t.sys.exit(1)
+_core_name = 'core_options'
 
 
 if __name__ == '__main__':

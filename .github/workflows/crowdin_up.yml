@@ -7,7 +7,7 @@ on:
     branches:
       - master
     paths:
-      - 'libgambatte/libretro/intl/_us/*.json'
+      - 'libgambatte/libretro/libretro_core_options.h'
 
 jobs:
   prepare_source_file:
@@ -22,11 +22,11 @@ jobs:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
-      - name: Crowdin Pre
+      - name: Crowdin Prep
         shell: bash
         run: |
           cd libgambatte/libretro/
-          python3 crowdin_pre.py "gambatte-libretro"
+          python3 crowdin_prep.py
           
       - name: Commit files
         run: |

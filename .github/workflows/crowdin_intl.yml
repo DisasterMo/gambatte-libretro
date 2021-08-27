@@ -1,6 +1,6 @@
 # Recreate libretro_core_options_intl.h using translations form Crowdin
 
-name: Crowdin Upload Preparation
+name: Crowdin Translation Integration
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
       - 'libgambatte/libretro/intl/_*'
 
 jobs:
-  prepare_source_file:
+  create_intl_file:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Python
@@ -22,11 +22,12 @@ jobs:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
-      - name: Crowdin Post
+      - name: Create intl file
         shell: bash
         run: |
           cd libgambatte/libretro/
           python3 crowdin_post.py
+
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
