@@ -14,14 +14,14 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Crowdin Pre
         shell: bash
         run: |
-          cd libgambatte
+          cd libgambatte/libretro/
           python3 crowdin_pre.py "gambatte-libretro"
-
-      - name: Checkout
-        uses: actions/checkout@v2
       
       - name: crowdin action
         uses: crowdin/github-action@1.0.4
@@ -35,5 +35,5 @@ jobs:
       - name: Crowdin Post
         shell: bash
         run: |
-          cd ../gambatte-libretro/libgambatte/libretro/
+          cd libgambatte/libretro/
           python3 crowdin_post.py "gambatte-libretro"
