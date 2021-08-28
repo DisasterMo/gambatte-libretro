@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import translate as t
+import core_opt_translation as t
 
 _core_name = 'core_options'
 

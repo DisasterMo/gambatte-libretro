@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import translate as t
+import core_opt_translation as t
 
 _core_name = 'core_options'
 
@@ -18,20 +18,6 @@ if __name__ == '__main__':
         _files = t.create_msg_hash(_core_name, _hash_n_str)
 
         _source_jsons = t.h2json(_files)
-
-        print("Getting translations from libretro_core_options_intl.h")
-        try:
-            with open(t.INTL_FILE_PATH, 'r+', encoding='utf-8') as _intl_file:
-                _intl_text = _intl_file.read()
-                _err = False
-        except OSError:
-            print(f'ERROR: Could not find/open {t.INTL_FILE_PATH}!')
-            _err = True
-
-        if not _err:
-            _hash_n_str_intl = t.get_texts(_intl_text)
-            _intl_files = t.create_msg_hash(_core_name, _hash_n_str_intl)
-            _intl_jsons = t.h2json(_intl_files)
 
     except Exception as e:
         print(e)
