@@ -7,7 +7,7 @@ on:
     branches:
       - master
     paths:
-      - 'libgambatte/libretro/intl/'
+      - 'libgambatte/libretro/intl/*/*'
 
 jobs:
   create_intl_file:
