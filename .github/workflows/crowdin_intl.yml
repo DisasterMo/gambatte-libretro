@@ -26,7 +26,7 @@ jobs:
         shell: bash
         run: |
           cd libgambatte/libretro/
-          python3 crowdin_post.py
+          python3 crowdin_intl.py
 
       - name: Commit files
         run: |
