@@ -553,7 +553,7 @@ def create_intl_file(intl_file_path: str, intl_dir_path: str, text: str, core_na
         for msg in masked_msgs:
             msg_dict[msg.group(2)] = msg.group(1)
 
-    with open(intl_file_path, 'w', encoding='utf-8') as intl:  # libretro_core_options_intl.h
+    with open(intl_file_path, 'r', encoding='utf-8') as intl:  # libretro_core_options_intl.h
         in_text = intl.read()
         intl_start = re.search(re.escape('/*\n'
                                          ' ********************************\n'
@@ -568,48 +568,49 @@ def create_intl_file(intl_file_path: str, intl_dir_path: str, text: str, core_na
                                              '#endif\n'), in_text)
             out_txt = in_text[:intl_start.end(0)]
 
-        for folder in os.listdir(intl_dir_path):  # intl/_*
-            if folder.startswith('_') and folder != '_us' and folder != '__pycache__':
-                translation_path = JOINER.join((intl_dir_path, folder, core_name + '.h'))  # <core_name>_<lang>.h
-                # all structs: group(0) full struct, group(1) beginning, group(2) content
-                struct_groups = cor.p_struct.finditer(text)
-                lang_up = folder.upper()
-                lang_low = folder.lower()
-                out_txt = out_txt + f'/* {LANG_CODE_TO_R_LANG[lang_low]} */\n\n'  # /* RETRO_LANGUAGE_NAME */
-                with open(translation_path, 'r+', encoding='utf-8') as f_in:  # <core name>.h
-                    out_txt = out_txt + f_in.read() + '\n'
-                for construct in struct_groups:
-                    declaration = construct.group(1)
-                    struct_type_name = get_struct_type_name(declaration)
-                    if 3 > len(struct_type_name):  # no language specifier
-                        new_decl = re.sub(re.escape(struct_type_name[1]), struct_type_name[1] + lang_low, declaration)
-                    else:
-                        new_decl = re.sub(re.escape(struct_type_name[2]), lang_low, declaration)
-                        if '_us' != struct_type_name[2]:
-                            continue
+    for folder in os.listdir(intl_dir_path):  # intl/_*
+        if folder.startswith('_') and folder != '_us' and folder != '__pycache__':
+            translation_path = JOINER.join((intl_dir_path, folder, core_name + '.h'))  # <core_name>_<lang>.h
+            # all structs: group(0) full struct, group(1) beginning, group(2) content
+            struct_groups = cor.p_struct.finditer(text)
+            lang_up = folder.upper()
+            lang_low = folder.lower()
+            out_txt = out_txt + f'/* {LANG_CODE_TO_R_LANG[lang_low]} */\n\n'  # /* RETRO_LANGUAGE_NAME */
+            with open(translation_path, 'r+', encoding='utf-8') as f_in:  # <core name>.h
+                out_txt = out_txt + f_in.read() + '\n'
+            for construct in struct_groups:
+                declaration = construct.group(1)
+                struct_type_name = get_struct_type_name(declaration)
+                if 3 > len(struct_type_name):  # no language specifier
+                    new_decl = re.sub(re.escape(struct_type_name[1]), struct_type_name[1] + lang_low, declaration)
+                else:
+                    new_decl = re.sub(re.escape(struct_type_name[2]), lang_low, declaration)
+                    if '_us' != struct_type_name[2]:
+                        continue
 
-                    p = cor.p_info
-                    if 'retro_core_option_v2_category' == struct_type_name[0]:
-                        p = cor.p_info_cat
-                    offset_construct = construct.start(0)
-                    start = construct.end(1) - offset_construct
-                    end = construct.start(2) - offset_construct
-                    out_txt = out_txt + new_decl + construct.group(0)[start:end]
+                p = cor.p_info
+                if 'retro_core_option_v2_category' == struct_type_name[0]:
+                    p = cor.p_info_cat
+                offset_construct = construct.start(0)
+                start = construct.end(1) - offset_construct
+                end = construct.start(2) - offset_construct
+                out_txt = out_txt + new_decl + construct.group(0)[start:end]
 
-                    content = construct.group(2)
-                    new_content = cor.p_option.sub(replace_option, content)
+                content = construct.group(2)
+                new_content = cor.p_option.sub(replace_option, content)
 
-                    start = construct.end(2) - offset_construct
-                    out_txt = out_txt + new_content + construct.group(0)[start:] + '\n'
+                start = construct.end(2) - offset_construct
+                out_txt = out_txt + new_content + construct.group(0)[start:] + '\n'
 
-                    if 'retro_core_option_v2_definition' == struct_type_name[0]:
-                        out_txt = out_txt + f'struct retro_core_options_v2 options{lang_low}' \
-                                            ' = {\n' \
-                                            f'   option_cats{lang_low},\n' \
-                                            f'   option_defs{lang_low}\n' \
-                                            '};\n\n'
-            #    shutil.rmtree(JOINER.join((intl_dir_path, folder)))
+                if 'retro_core_option_v2_definition' == struct_type_name[0]:
+                    out_txt = out_txt + f'struct retro_core_options_v2 options{lang_low}' \
+                                        ' = {\n' \
+                                        f'   option_cats{lang_low},\n' \
+                                        f'   option_defs{lang_low}\n' \
+                                        '};\n\n'
+        #    shutil.rmtree(JOINER.join((intl_dir_path, folder)))
 
+    with open(intl_file_path, 'w', encoding='utf-8') as intl:
         intl.write(out_txt + '\n#ifdef __cplusplus\n'
                              '}\n#endif\n'
                              '\n#endif')

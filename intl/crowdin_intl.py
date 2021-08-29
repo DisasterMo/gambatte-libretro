@@ -15,7 +15,7 @@ if __name__ == '__main__':
             _temp = _temp[:-1]
         TARGET_DIR_PATH = _temp
     except IndexError:
-        TARGET_DIR_PATH = t.os.path.dirname(t.os.path.dirname(t.os.path.realpath(__file__)))
+        TARGET_DIR_PATH = '../libgambatte/libretro'  # t.os.path.dirname(t.os.path.dirname(t.os.path.realpath(__file__)))
         print("No path provided, assuming parent directory:\n" + TARGET_DIR_PATH)
 
     DIR_PATH = t.os.path.dirname(t.os.path.realpath(__file__))
