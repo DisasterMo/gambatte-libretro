@@ -553,7 +553,7 @@ def create_intl_file(intl_file_path: str, intl_dir_path: str, text: str, core_na
         for msg in masked_msgs:
             msg_dict[msg.group(2)] = msg.group(1)
     for folder in os.listdir(intl_dir_path):  # intl/_*
-        if folder.startswith('_') and folder != '_us':
+        if folder.startswith('_') and folder != '_us' and folder != '__pycache__':
             translation_path = JOINER.join((intl_dir_path, folder, core_name + '.h'))  # <core_name>_<lang>.h
             # all structs: group(0) full struct, group(1) beginning, group(2) content
             struct_groups = cor.p_struct.finditer(text)
