@@ -23,7 +23,7 @@ if __name__ == '__main__':
         _core_name = t.clean_file_name(_core_name)
 
         print('Getting texts from libretro_core_options.h')
-        with open(t.H_FILE_PATH, 'r+', encoding='utf-8') as _h_file:
+        with open(H_FILE_PATH, 'r+', encoding='utf-8') as _h_file:
             _main_text = _h_file.read()
         _hash_n_str = t.get_texts(_main_text)
         if not t.os.path.exists(DIR_PATH):
