@@ -7,7 +7,7 @@ on:
     branches:
       - master
     paths:
-      - 'libgambatte/libretro/intl/*/*'
+      - 'intl/*/*'
 
 jobs:
   create_intl_file:
@@ -25,14 +25,14 @@ jobs:
       - name: Create intl file
         shell: bash
         run: |
-          cd libgambatte/libretro/
-          python3 crowdin_intl.py
+          cd intl
+          python3 crowdin_intl.py 'libgambatte/libretro/'
 
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add libgambatte/libretro/intl/*
+          git add libgambatte/libretro/libretro_core_options_intl.h
           git commit -m "Recreate libretro_core_options_intl.h" -a
 
       - name: GitHub Push

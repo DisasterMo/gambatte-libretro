@@ -25,14 +25,14 @@ jobs:
       - name: Crowdin Prep
         shell: bash
         run: |
-          cd libgambatte/libretro/
-          python3 crowdin_prep.py
+          cd intl
+          python3 crowdin_prep.py 'libgambatte/libretro/'
           
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add libgambatte/libretro/intl/*
+          git add intl/*
           git commit -m "Recreate translation source text files" -a
 
       - name: GitHub Push
