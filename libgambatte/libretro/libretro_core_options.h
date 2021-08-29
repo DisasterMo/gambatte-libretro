@@ -52,7 +52,7 @@ extern "C" {
 struct retro_core_option_v2_category option_cats_us[] = {
    {
       "gb_link",
-      "Game Boy Link",
+      "Game Boy Stink",
       "Configure networked 'Game Boy Link' (multiplayer) options."
    },
    { NULL, NULL, NULL },
