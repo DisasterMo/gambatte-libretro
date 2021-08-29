@@ -455,7 +455,7 @@ def create_intl_file(intl_file_path: str, intl_dir_path: str, text: str, core_na
         else:
             return pair_match.group(0)
         res = pair_match.group(0)[:pair_match.start(2) - offset] + val \
-            + pair_match.group(0)[pair_match.end(2) - offset:]
+              + pair_match.group(0)[pair_match.end(2) - offset:]
         return res
 
     def replace_info(info_match):
@@ -505,96 +505,111 @@ def create_intl_file(intl_file_path: str, intl_dir_path: str, text: str, core_na
 
         return res
 
-    if os.path.isfile(intl_file_path):  # make back up
-        if not os.path.isfile(intl_file_path + '.old'):  # don't overwrite old one
-            shutil.copy(intl_file_path, intl_file_path + '.old')
+    # if os.path.isfile(intl_file_path):  # make back up
+    #     if not os.path.isfile(intl_file_path + '.old'):  # don't overwrite old one
+    #         shutil.copy(intl_file_path, intl_file_path + '.old')
 
-    out_txt = '#ifndef LIBRETRO_CORE_OPTIONS_INTL_H__\n' \
-              '#define LIBRETRO_CORE_OPTIONS_INTL_H__\n' \
-              '\n' \
-              '#if defined(_MSC_VER) && (_MSC_VER >= 1500 && _MSC_VER < 1900)\n' \
-              '/* https://support.microsoft.com/en-us/kb/980263 */\n' \
-              '#pragma execution_character_set("utf-8")\n' \
-              '#pragma warning(disable:4566)\n' \
-              '#endif\n' \
-              '\n' \
-              '#include <libretro.h>\n' \
-              '\n' \
-              '/*\n' \
-              ' ********************************\n' \
-              ' * VERSION: 2.0\n' \
-              ' ********************************\n' \
-              ' *\n' \
-              ' * - 2.0: Add support for core options v2 interface\n' \
-              ' * - 1.3: Move translations to libretro_core_options_intl.h\n' \
-              ' *        - libretro_core_options_intl.h includes BOM and utf-8\n' \
-              ' *          fix for MSVC 2010-2013\n' \
-              ' *        - Added HAVE_NO_LANGEXTRA flag to disable translations\n' \
-              ' *          on platforms/compilers without BOM support\n' \
-              ' * - 1.2: Use core options v1 interface when\n' \
-              ' *        RETRO_ENVIRONMENT_GET_CORE_OPTIONS_VERSION is >= 1\n' \
-              ' *        (previously required RETRO_ENVIRONMENT_GET_CORE_OPTIONS_VERSION == 1)\n' \
-              ' * - 1.1: Support generation of core options v0 retro_core_option_value\n' \
-              ' *        arrays containing options with a single value\n' \
-              ' * - 1.0: First commit\n' \
-              '*/\n' \
-              '\n' \
-              '#ifdef __cplusplus\n' \
-              'extern "C" {\n' \
-              '#endif\n' \
-              '\n' \
-              '/*\n' \
-              ' ********************************\n' \
-              ' * Core Option Definitions\n' \
-              ' ********************************\n' \
-              '*/\n\n'
+    # out_txt = '#ifndef LIBRETRO_CORE_OPTIONS_INTL_H__\n' \
+    #           '#define LIBRETRO_CORE_OPTIONS_INTL_H__\n' \
+    #           '\n' \
+    #           '#if defined(_MSC_VER) && (_MSC_VER >= 1500 && _MSC_VER < 1900)\n' \
+    #           '/* https://support.microsoft.com/en-us/kb/980263 */\n' \
+    #           '#pragma execution_character_set("utf-8")\n' \
+    #           '#pragma warning(disable:4566)\n' \
+    #           '#endif\n' \
+    #           '\n' \
+    #           '#include <libretro.h>\n' \
+    #           '\n' \
+    #           '/*\n' \
+    #           ' ********************************\n' \
+    #           ' * VERSION: 2.0\n' \
+    #           ' ********************************\n' \
+    #           ' *\n' \
+    #           ' * - 2.0: Add support for core options v2 interface\n' \
+    #           ' * - 1.3: Move translations to libretro_core_options_intl.h\n' \
+    #           ' *        - libretro_core_options_intl.h includes BOM and utf-8\n' \
+    #           ' *          fix for MSVC 2010-2013\n' \
+    #           ' *        - Added HAVE_NO_LANGEXTRA flag to disable translations\n' \
+    #           ' *          on platforms/compilers without BOM support\n' \
+    #           ' * - 1.2: Use core options v1 interface when\n' \
+    #           ' *        RETRO_ENVIRONMENT_GET_CORE_OPTIONS_VERSION is >= 1\n' \
+    #           ' *        (previously required RETRO_ENVIRONMENT_GET_CORE_OPTIONS_VERSION == 1)\n' \
+    #           ' * - 1.1: Support generation of core options v0 retro_core_option_value\n' \
+    #           ' *        arrays containing options with a single value\n' \
+    #           ' * - 1.0: First commit\n' \
+    #           '*/\n' \
+    #           '\n' \
+    #           '#ifdef __cplusplus\n' \
+    #           'extern "C" {\n' \
+    #           '#endif\n' \
+    #           '\n' \
+    #           '/*\n' \
+    #           ' ********************************\n' \
+    #           ' * Core Option Definitions\n' \
+    #           ' ********************************\n' \
+    #           '*/\n\n'
     with open(file_path, 'r+', encoding='utf-8') as template:  # intl/_us/<core_name>.h
         masked_msgs = cor.p_masked.finditer(template.read())
         for msg in masked_msgs:
             msg_dict[msg.group(2)] = msg.group(1)
-    for folder in os.listdir(intl_dir_path):  # intl/_*
-        if folder.startswith('_') and folder != '_us' and folder != '__pycache__':
-            translation_path = JOINER.join((intl_dir_path, folder, core_name + '.h'))  # <core_name>_<lang>.h
-            # all structs: group(0) full struct, group(1) beginning, group(2) content
-            struct_groups = cor.p_struct.finditer(text)
-            lang_up = folder.upper()
-            lang_low = folder.lower()
-            out_txt = out_txt + f'/* {LANG_CODE_TO_R_LANG[lang_low]} */\n\n'  # /* RETRO_LANGUAGE_NAME */
-            with open(translation_path, 'r+', encoding='utf-8') as f_in:  # <core name>.h
-                out_txt = out_txt + f_in.read() + '\n'
-            for construct in struct_groups:
-                declaration = construct.group(1)
-                struct_type_name = get_struct_type_name(declaration)
-                if 3 > len(struct_type_name):  # no language specifier
-                    new_decl = re.sub(re.escape(struct_type_name[1]), struct_type_name[1] + lang_low, declaration)
-                else:
-                    new_decl = re.sub(re.escape(struct_type_name[2]), lang_low, declaration)
-                    if '_us' != struct_type_name[2]:
-                        continue
-
-                p = cor.p_info
-                if 'retro_core_option_v2_category' == struct_type_name[0]:
-                    p = cor.p_info_cat
-                offset_construct = construct.start(0)
-                start = construct.end(1) - offset_construct
-                end = construct.start(2) - offset_construct
-                out_txt = out_txt + new_decl + construct.group(0)[start:end]
-
-                content = construct.group(2)
-                new_content = cor.p_option.sub(replace_option, content)
-
-                start = construct.end(2) - offset_construct
-                out_txt = out_txt + new_content + construct.group(0)[start:] + '\n'
-
-                if 'retro_core_option_definition' != struct_type_name[0]:
-                    out_txt = out_txt + f'struct retro_core_options_v2 options{lang_low}' \
-                                        ' = {\n' \
-                                        f'   option_cats{lang_low},\n' \
-                                        f'   option_defs{lang_low}\n' \
-                                        '};\n\n'
-        #    shutil.rmtree(JOINER.join((intl_dir_path, folder)))
 
     with open(intl_file_path, 'w', encoding='utf-8') as intl:  # libretro_core_options_intl.h
+        in_text = intl.read()
+        intl_start = re.search(re.escape('/*\n'
+                                         ' ********************************\n'
+                                         ' * Core Option Definitions\n'
+                                         ' ********************************\n'
+                                         '*/\n'), in_text)
+        if intl_start:
+            out_txt = in_text[:intl_start.end(0)]
+        else:
+            intl_start = re.search(re.escape('#ifdef __cplusplus\n'
+                                             'extern "C" {\n'
+                                             '#endif\n'), in_text)
+            out_txt = in_text[:intl_start.end(0)]
+
+        for folder in os.listdir(intl_dir_path):  # intl/_*
+            if folder.startswith('_') and folder != '_us' and folder != '__pycache__':
+                translation_path = JOINER.join((intl_dir_path, folder, core_name + '.h'))  # <core_name>_<lang>.h
+                # all structs: group(0) full struct, group(1) beginning, group(2) content
+                struct_groups = cor.p_struct.finditer(text)
+                lang_up = folder.upper()
+                lang_low = folder.lower()
+                out_txt = out_txt + f'/* {LANG_CODE_TO_R_LANG[lang_low]} */\n\n'  # /* RETRO_LANGUAGE_NAME */
+                with open(translation_path, 'r+', encoding='utf-8') as f_in:  # <core name>.h
+                    out_txt = out_txt + f_in.read() + '\n'
+                for construct in struct_groups:
+                    declaration = construct.group(1)
+                    struct_type_name = get_struct_type_name(declaration)
+                    if 3 > len(struct_type_name):  # no language specifier
+                        new_decl = re.sub(re.escape(struct_type_name[1]), struct_type_name[1] + lang_low, declaration)
+                    else:
+                        new_decl = re.sub(re.escape(struct_type_name[2]), lang_low, declaration)
+                        if '_us' != struct_type_name[2]:
+                            continue
+
+                    p = cor.p_info
+                    if 'retro_core_option_v2_category' == struct_type_name[0]:
+                        p = cor.p_info_cat
+                    offset_construct = construct.start(0)
+                    start = construct.end(1) - offset_construct
+                    end = construct.start(2) - offset_construct
+                    out_txt = out_txt + new_decl + construct.group(0)[start:end]
+
+                    content = construct.group(2)
+                    new_content = cor.p_option.sub(replace_option, content)
+
+                    start = construct.end(2) - offset_construct
+                    out_txt = out_txt + new_content + construct.group(0)[start:] + '\n'
+
+                    if 'retro_core_option_v2_definition' == struct_type_name[0]:
+                        out_txt = out_txt + f'struct retro_core_options_v2 options{lang_low}' \
+                                            ' = {\n' \
+                                            f'   option_cats{lang_low},\n' \
+                                            f'   option_defs{lang_low}\n' \
+                                            '};\n\n'
+            #    shutil.rmtree(JOINER.join((intl_dir_path, folder)))
+
         intl.write(out_txt + '\n#ifdef __cplusplus\n'
                              '}\n#endif\n'
                              '\n#endif')
