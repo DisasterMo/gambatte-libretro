@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
         print('Converting translations *.json to *.h:')
         for _folder in t.os.listdir(DIR_PATH):
-            if _folder.startswith('_'):
+            if _folder.startswith('_') and _folder != '__pycache__':
                 print(_folder)
                 t.json2h(DIR_PATH, t.JOINER.join((DIR_PATH, _folder)), _core_name)
 
