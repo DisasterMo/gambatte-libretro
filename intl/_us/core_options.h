@@ -1,4 +1,4 @@
-CATEGORY_GB_LINK_LABEL "Game Boy Stink"
+CATEGORY_GB_LINK_LABEL "Game Boy Link"
 CATEGORY_GB_LINK_INFO_0 "Configure networked 'Game Boy Link' (multiplayer) options."
 GAMBATTE_GB_COLORIZATION_LABEL "GB Colorization"
 GAMBATTE_GB_COLORIZATION_INFO_0 "Enables colorization of Game Boy games. 'Auto' selects the 'best' (most colorful/appropriate) palette. 'GBC' selects game-specific Game Boy Color palette if defined, otherwise 'GBC - Dark Green'. 'SGB' selects game-specific Super Game Boy palette if defined, otherwise 'SGB - 1A', 'Internal' uses 'Internal Palette' core option. 'Custom' loads user-created palette from system directory."
