@@ -25,8 +25,7 @@ jobs:
       - name: Crowdin Prep
         shell: bash
         run: |
-          cd intl
-          python3 crowdin_prep.py 'libgambatte/libretro'
+          python3 intl/crowdin_prep.py 'libgambatte/libretro'
           
       - name: Commit files
         run: |
