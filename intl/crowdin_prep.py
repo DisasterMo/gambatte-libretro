@@ -8,9 +8,12 @@ _core_name = 'core_options'
 if __name__ == '__main__':
     try:
         if t.os.path.isfile(t.sys.argv[1]):
-            TARGET_DIR_PATH = t.os.path.dirname(t.sys.argv[1])
+            _temp = t.os.path.dirname(t.sys.argv[1])
         else:
-            TARGET_DIR_PATH = t.sys.argv[1]
+            _temp = t.sys.argv[1]
+        while _temp.endswith('/') or _temp.endswith('\\'):
+            _temp = _temp[:-1]
+        TARGET_DIR_PATH = _temp
     except IndexError:
         TARGET_DIR_PATH = t.os.path.dirname(t.os.path.dirname(t.os.path.realpath(__file__)))
         print("No path provided, assuming parent directory:\n" + TARGET_DIR_PATH)

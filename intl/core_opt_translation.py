@@ -607,9 +607,12 @@ if __name__ == '__main__':
     #
     try:
         if os.path.isfile(sys.argv[1]):
-            TARGET_DIR_PATH = os.path.dirname(sys.argv[1])
+            _temp = os.path.dirname(sys.argv[1])
         else:
-            TARGET_DIR_PATH = sys.argv[1]
+            _temp = sys.argv[1]
+        while _temp.endswith('/') or _temp.endswith('\\'):
+            _temp = _temp[:-1]
+        TARGET_DIR_PATH = _temp
     except IndexError:
         TARGET_DIR_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
         print("No path provided, assuming parent directory:\n" + TARGET_DIR_PATH)
